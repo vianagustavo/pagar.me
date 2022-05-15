@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Transaction {
+  id String @id @default(uuid())
+  charge_amount String
+  description String
+  payment_method String
+  card_number String
+  card_holder_name String
+  valid_thru String
+  cvv String
+
+  @@map("transactions")
+}
+
+model Payable {
+id String @id @default(uuid())
+status String
+payment_date DateTime
+balance Int
+
+@@map("payables")
+}

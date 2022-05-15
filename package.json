@@ -1,0 +1,26 @@
+{
+  "name": "pagar.me",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/vianagustavo/pagar.me.git",
+  "author": "Gustavo <gustavofvv@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev -r dotenv/config src/server.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.14.0",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.33",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "prisma": "^3.14.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "express-async-errors": "^3.1.1",
+    "ts-node": "^10.7.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.4"
+  }
+}
