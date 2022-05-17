@@ -9,7 +9,7 @@ datasource db {
 
 model Transaction {
   id String @id @default(uuid())
-  charge_amount String
+  charge_amount Float
   description String
   payment_method String
   card_number String
@@ -24,7 +24,7 @@ model Payable {
 id String @id @default(uuid())
 status String
 payment_date DateTime
-balance Int
+balance Float
 
 @@map("payables")
 }
