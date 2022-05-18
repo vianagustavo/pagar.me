@@ -1,5 +1,5 @@
 export interface ITransactionRequest {
-  chargeAmount: string;
+  chargeAmount: number;
   description: string;
   paymentMethod: string;
   cardNumber: string;

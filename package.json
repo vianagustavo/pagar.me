@@ -6,7 +6,8 @@
   "author": "Gustavo <gustavofvv@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev -r dotenv/config src/server.ts"
+    "dev": "ts-node-dev -r dotenv/config src/server.ts",
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "@prisma/client": "^3.14.0",
@@ -17,8 +18,13 @@
     "prisma": "^3.14.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.5.1",
+    "@types/supertest": "^2.0.12",
     "eslint": "^8.15.0",
     "express-async-errors": "^3.1.1",
+    "jest": "^28.1.0",
+    "supertest": "^6.2.3",
+    "ts-jest": "^28.0.2",
     "ts-node": "^10.7.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.4"
