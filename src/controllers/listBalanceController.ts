@@ -7,8 +7,8 @@ class ListBalanceController {
     const balance = await listBalanceService.execute();
 
     return response.json({
-      Available: balance.available_balance._sum.balance,
-      Pending_funds: balance.pending_funds._sum.balance
+      available: balance.available,
+      pending_funds: balance.pending_funds
     });
   }
 }

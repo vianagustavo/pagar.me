@@ -10,4 +10,10 @@ beforeAll(() => {
   return prismaClient.$connect();
 });
 
+afterAll(() => {
+  prismaClient.transaction.deleteMany();
+  prismaClient.payable.deleteMany();
+  return;
+});
+
 export const superAppRequest = request(app);

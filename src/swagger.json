@@ -1,0 +1,145 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Pagar.me Documentation",
+    "description": "This is a Payment API",
+    "version": "1.0.0",
+    "contact": {
+      "email": "gustavofvv@gmail.com"
+    }
+  },
+  "paths": {
+    "/transactions": {
+      "post": {
+        "tags": ["Transaction"],
+        "summary": "Create a Transaction",
+        "description": "Create a new Transaction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "chargeAmount": {
+                    "type": "number"
+                  },
+                  "description": {
+                     "type": "string"
+                  },
+                  "paymentMethod": {
+                    "type": "PaymentMethod"
+                  },
+                  "cardNumber": {
+                    "type": "string"
+                  },
+                  "cardHolderName": {
+                    "type": "string"
+                  },
+                  "validThrough": {
+                    "type": "string"
+                  },
+                  "cardCvv": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "chargeAmount": 1650,
+                  "description": "Iphone 13 Max Pro",
+                  "paymentMethod": "CREDIT",
+                  "cardNumber": "1234567812345678",
+                  "cardHolderName": "Sample Name",
+                  "validThrough": "07/07",
+                  "cardCvv": "222"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transaction Created"
+          },
+          "503": {
+            "description": "Invalid Arguments for Transaction"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "List all transactions",
+        "description": "List all transactions",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                       "type": "string"
+                      },
+                      "charge_amount": {
+                        "type": "number"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "payment_method": {
+                        "type": "PaymentMethod"
+                      },
+                      "card_number": {
+                        "type": "string"
+                      },
+                      "card_holder_name": {
+                        "type": "string"
+                      },
+                      "valid_thru": {
+                        "type": "string"
+                      },
+                      "cvv": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "Date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payables": {
+      "get": {
+        "tags": ["Payable"],
+        "summary": "Lists both balances",
+        "description": "List available/pending balance for user",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "available": {
+                      "type": "string"
+                    },
+                    "pending_funds": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

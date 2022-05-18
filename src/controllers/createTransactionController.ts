@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
-import { ITransactionRequest } from "../domain/requestDto";
+import {
+  ITransactionRequest,
+  ITransactionResponse
+} from "../domain/requestDto";
 import { CreateTransactionService } from "../services/createTransactionService";
 
 class CreateTransactionController {
@@ -11,19 +14,20 @@ class CreateTransactionController {
       cardNumber,
       cardHolderName,
       validThrough,
-      cvv
+      cardCvv
     }: ITransactionRequest = request.body;
 
     const createTransactionService = new CreateTransactionService();
-    const transaction = await createTransactionService.execute({
-      chargeAmount,
-      description,
-      paymentMethod,
-      cardNumber,
-      cardHolderName,
-      validThrough,
-      cvv
-    });
+    const transaction: ITransactionResponse =
+      await createTransactionService.execute({
+        chargeAmount,
+        description,
+        paymentMethod,
+        cardNumber,
+        cardHolderName,
+        validThrough,
+        cardCvv
+      });
 
     return response.json(transaction);
   }
