@@ -1,6 +1,40 @@
+import { PaymentMethod, PaymentStatus } from "@prisma/client";
 import { InvalidArgument } from "../app";
 import { prismaClient } from "../database/prismaClient";
 import { ITransactionRequest } from "../domain/requestDto";
+
+interface IPaymentVariables {
+  paymentMethod: PaymentMethod;
+  chargeAmount: number;
+}
+
+interface IPaymentVariablesReturn {
+  cashAmount: number;
+  paymentDate: Date;
+  paymentStatus: PaymentStatus;
+}
+
+function getPaymentVariables({
+  paymentMethod,
+  chargeAmount
+}: IPaymentVariables) {
+  const DEBIT_FEE = 0.97;
+  const paymentVariables: IPaymentVariablesReturn = {
+    cashAmount: chargeAmount * DEBIT_FEE,
+    paymentDate: new Date(),
+    paymentStatus: PaymentStatus.PAID
+  };
+  if (paymentMethod === PaymentMethod.CREDIT) {
+    const CREDIT_FEE = 0.95;
+    const newPaymentDate = paymentVariables.paymentDate.setDate(
+      paymentVariables.paymentDate.getDate() + 30
+    );
+    paymentVariables.cashAmount = chargeAmount * CREDIT_FEE;
+    paymentVariables.paymentDate = new Date(newPaymentDate);
+    paymentVariables.paymentStatus = PaymentStatus.WAITING_FUNDS;
+  }
+  return paymentVariables;
+}
 
 class CreateTransactionService {
   async execute({
@@ -10,7 +44,7 @@ class CreateTransactionService {
     cardNumber,
     cardHolderName,
     validThrough,
-    cvv
+    cardCvv
   }: ITransactionRequest) {
     if (
       !chargeAmount ||
@@ -19,67 +53,40 @@ class CreateTransactionService {
       !cardNumber ||
       !cardHolderName ||
       !validThrough ||
-      !cvv
+      !cardCvv
     ) {
       throw new InvalidArgument("All fields must be answered correctly");
     }
-    if (!(paymentMethod === "debit_card" || paymentMethod === "credit_card")) {
-      throw new InvalidArgument("Incorrect payment method");
-    }
 
     const cardLastDigits = cardNumber.slice(cardNumber.length - 4);
-    if (paymentMethod === "debit_card") {
-      const cashAmount = chargeAmount * 0.97;
-      const [transaction] = await prismaClient.$transaction([
-        prismaClient.transaction.create({
-          data: {
-            charge_amount: chargeAmount,
-            description,
-            payment_method: paymentMethod,
-            card_number: cardLastDigits,
-            card_holder_name: cardHolderName,
-            valid_thru: validThrough,
-            cvv
-          }
-        }),
-        prismaClient.payable.create({
-          data: {
-            status: "paid",
-            payment_date: new Date(),
-            balance: cashAmount
-          }
-        })
-      ]);
+    const paymentVariablesRequest = getPaymentVariables({
+      paymentMethod,
+      chargeAmount
+    });
 
-      return transaction;
-    }
-    if (paymentMethod === "credit_card") {
-      const cashAmount = chargeAmount * 0.95;
-      const date = new Date();
-      date.setDate(date.getDate() + 30);
-      const [transaction] = await prismaClient.$transaction([
-        prismaClient.transaction.create({
-          data: {
-            charge_amount: chargeAmount,
-            description,
-            payment_method: paymentMethod,
-            card_number: cardLastDigits,
-            card_holder_name: cardHolderName,
-            valid_thru: validThrough,
-            cvv
-          }
-        }),
-        prismaClient.payable.create({
-          data: {
-            status: "waiting_funds",
-            payment_date: date,
-            balance: cashAmount
-          }
-        })
-      ]);
+    const [transaction] = await prismaClient.$transaction([
+      prismaClient.transaction.create({
+        data: {
+          charge_amount: chargeAmount,
+          description,
+          payment_method: paymentMethod,
+          card_number: cardLastDigits,
+          card_holder_name: cardHolderName,
+          valid_thru: validThrough,
+          cvv: cardCvv
+        }
+      }),
+      prismaClient.payable.create({
+        data: {
+          status: paymentVariablesRequest.paymentStatus,
+          payment_date: paymentVariablesRequest.paymentDate,
+          balance: paymentVariablesRequest.cashAmount
+        }
+      })
+    ]);
+    const { cvv, ...transactionResponse } = transaction;
 
-      return transaction;
-    }
+    return transactionResponse;
   }
 }
 

@@ -17,6 +17,6 @@ router.get("/", (_, response: Response) => {
 
 router.post("/transactions", createTransactionController.handle);
 router.get("/transactions", listTransactionsController.handle);
-router.get("/payables/:filter", listBalanceController.handle);
+router.get("/payables", listBalanceController.handle);
 
 export { router };

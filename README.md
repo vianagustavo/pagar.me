@@ -8,6 +8,8 @@ API feita para gerenciar uma rede de pagamentos de acordo com o desafio proposto
 2. <a href="#Inicializando">Inicializando</a>
 3. <a href="#Configurando o Projeto">Configurando o Projeto</a>
 4. <a href="#Rodando Testes">Rodando Testes</a>
+5. <a href="#API Endpoints">API Endpoints</a>
+6. <a href="#Autor">Autor</a>
 
 
 ## Tecnologias Utilizadas
@@ -45,3 +47,16 @@ Os testes de integração estão disponíveis para essa aplicação, e o script 
 $ yarn test
 
 ```
+
+## API Endpoints
+
+|  Verbo   |                    Endpoint                     |                 Descrição                  |
+| :------- | :---------------------------------------------: | :----------------------------------------: |
+| `POST`   |                   `/transactions`               |         Criação de nova transação          |
+| `GET`    |                   `/transactions`               |      Listagem de todas as transactions     |
+| `POST`   |                    `/payables`                  |        Listagem dos saldos atuais          |
+| `GET`    |                    `/api-docs`                  |         Documentação dos endpoints         |
+
+## Autor
+
+- **Gustavo Ferreira Viana**

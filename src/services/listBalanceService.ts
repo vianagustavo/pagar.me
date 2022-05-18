@@ -1,28 +1,25 @@
-import { InvalidArgument } from "../app";
+import { PaymentStatus } from "@prisma/client";
 import { prismaClient } from "../database/prismaClient";
 
 class ListBalanceService {
   async execute() {
-    const available_balance = await prismaClient.payable.aggregate({
+    const balance = await prismaClient.payable.groupBy({
+      by: ["status"],
       _sum: {
         balance: true
-      },
-      where: {
-        status: "paid"
-      }
-    });
-    const pending_funds = await prismaClient.payable.aggregate({
-      _sum: {
-        balance: true
-      },
-      where: {
-        status: "waiting_funds"
       }
     });
 
+    const availableBalance = balance
+      .find((balance) => balance.status === PaymentStatus.PAID)
+      ?._sum.balance?.toFixed(2);
+    const pendingBalance = balance
+      .find((balance) => balance.status === PaymentStatus.WAITING_FUNDS)
+      ?._sum.balance?.toFixed(2);
+
     const listBalances = {
-      available_balance,
-      pending_funds
+      available: availableBalance,
+      pending_funds: pendingBalance
     };
 
     return listBalances;
