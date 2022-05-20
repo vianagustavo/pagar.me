@@ -1,6 +1,5 @@
 # Pagar.me
-
-API feita para gerenciar uma rede de pagamentos de acordo com o desafio proposto pela empresa. Através da aplicação os clientes podem processar transações (cash-in) e receber pagamentos (cash-out)
+A fins de estudo, realizei o desafio proposto pela Pagar.me onde a API é feita para gerenciar uma rede de pagamentos. Através da aplicação os clientes podem processar transações (cash-in) e receber pagamentos (cash-out)
 
 
 # Sumário
@@ -26,7 +25,7 @@ API feita para gerenciar uma rede de pagamentos de acordo com o desafio proposto
 - Instalar dependências utilizadas no desenvolvimento: `yarn --frozen-lockfile`
 - Setar as variáveis de ambiente no .env
 - Rodar migrations geradas pelo Prisma: `yarn prisma migrate dev`
-- Subir a aplicação: `yarn dev`
+- Subir a aplicação localmente: `yarn dev`
 
 ## Configurando o Projeto
 

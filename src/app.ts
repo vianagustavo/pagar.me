@@ -7,8 +7,15 @@ import { router } from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
 
 export class NotFound extends Error {}
-export class InvalidArgument extends Error {}
+// export class InvalidArgument extends Error {}
 export class InternalServerError extends Error {}
+export class InvalidArgument extends Error {
+  constructor(message: string) {
+    super(message);
+
+    Object.setPrototypeOf(this, InvalidArgument.prototype);
+  }
+}
 
 const app = express();
 
